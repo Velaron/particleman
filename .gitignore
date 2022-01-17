@@ -5,6 +5,7 @@ Example/Debug
 Example/Release
 MultiEmulator/Debug
 MultiEmulator/Release
+build
 
 pfunct.h
 totals.h
