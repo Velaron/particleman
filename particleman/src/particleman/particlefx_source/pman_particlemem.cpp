@@ -25,6 +25,19 @@ long CMiniMem::m_lMemoryBlockSize = 0;
 long CMiniMem::m_lMaxBlocks = 0;
 CMiniMem *CMiniMem::_instance = nullptr;
 
+int MaxParticleClassSize( unsigned int iSize )
+{
+	int result = 276;
+
+	if( g_lMaxParticleClassSize >= 276 )
+		result = g_lMaxParticleClassSize;
+	
+	if( iSize && g_lMaxParticleClassSize < iSize )
+		result = iSize;
+
+	g_lMaxParticleClassSize = result;
+}
+
 CMiniMem::CMiniMem(long lMemoryPoolSize, long lMaxBlockSize)
 {
 	// m_lMemoryPoolSize = lMemoryPoolSize;
@@ -307,7 +320,7 @@ UNTESTED void CMiniMem::Reset(void)
 	}
 }
 
-int CMiniMem::ApplyForce(Vector vOrigin, Vector vDirection, float flRadius, float flStrength)
+int CMiniMem::ApplyForce(Vector *p_vOrigin, Vector *p_vDirection, float flRadius, float flStrength)
 {
 	return 0;
 }

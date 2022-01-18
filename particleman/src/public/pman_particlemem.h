@@ -192,7 +192,7 @@ public:
 	// Clears memory, setting all particles to not used.
 	void Reset(void);
 
-	static int ApplyForce(Vector vOrigin, Vector vDirection, float flRadius, float flStrength);
+	static int ApplyForce(Vector *p_vOrigin, Vector *p_vDirection, float flRadius, float flStrength);
 
 	static CMiniMem *Instance(void);
 	static long MaxBlockSize(void);

@@ -3,6 +3,13 @@
 #include "particleman.h"
 #include "pman_force.h"
 
+float g_flOldTime;
+
+float g_flGravity;
+Vector g_vViewAngles;
+
+float m_flDieTime;	//time to remove an object
+
 extern ForceList g_pForceList;
 
 class IParticleMan_Active : public IParticleMan
@@ -26,7 +33,7 @@ public:
 
 	}
 
-	void SetVariables(float flGravity, Vector vViewAngles)
+	void SetVariables(float flGravity, Vector *p_vViewAngles)
 	{
 
 	}
@@ -36,12 +43,12 @@ public:
 
 	}
 
-	void ApplyForce(Vector vOrigin, Vector vDirection, float flRadius, float flStrength, float flDuration)
+	void ApplyForce(Vector *p_vOrigin, Vector *p_vDirection, float flRadius, float flStrength, float flDuration)
 	{
 
 	}
 
-	void AddCustomParticleClassSize(unsigned long lSize)
+	void AddCustomParticleClassSize(unsigned int lSize)
 	{
 
 	}
@@ -56,7 +63,7 @@ public:
 		return nullptr;
 	}
 
-	void CoreInitializeSprite(CCoreTriangleEffect *pParticle, Vector org, Vector normal, model_s *sprite, float size, float brightness)
+	void CoreInitializeSprite(CCoreTriangleEffect *pParticle, Vector *p_org, Vector *p_normal, model_s *sprite, float size, float brightness)
 	{
 
 	}
@@ -135,3 +142,5 @@ public:
 
 	}
 };
+
+int MaxParticleClassSize( unsigned int iSize );
