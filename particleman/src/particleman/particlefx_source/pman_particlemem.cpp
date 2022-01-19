@@ -36,49 +36,45 @@ int MaxParticleClassSize( unsigned int iSize )
 		result = iSize;
 
 	g_lMaxParticleClassSize = result;
+
+	return result;
 }
 
-CMiniMem::CMiniMem(long lMemoryPoolSize, long lMaxBlockSize)
+// TODO: WHAMER: its........
+CMiniMem::CMiniMem(long lMemoryPoolSize, long lMaxBlockSize) 
 {
-	// m_lMemoryPoolSize = lMemoryPoolSize;
-	// m_lMemoryBlockSize = lMaxBlockSize;
-	// m_lMaxBlocks = lMemoryPoolSize / sizeof MemoryBlock;
-	//
-	// if (lMemoryPoolSize / 16 != 0)
-	// {
-	// 	int i = 0;
-	//
-	// 	do
-	// 	{
-	// 		while (true)
-	// 		{
-	// 			auto block = new MemoryBlock(m_lMemoryBlockSize);
-	// 			block->next = nullptr;
-	// 			block->prev = nullptr;
-	//
-	// 			// typedef std::vector<MemoryBlock *> VectorOfMemoryBlocks;
-	// 			// typedef VectorOfMemoryBlocks::iterator MemoryBlockIterator;
-	//
-	// 			// v7 = CMiniMem::m_vecMemoryPool.baseclass_0._M_impl._M_finish;
-	//
-	// 			if (true /* v7 == CMiniMem::m_vecMemoryPool.baseclass_0._M_impl._M_end_of_storage */)
-	// 			{
-	//
-	// 			}
-	// 			else
-	// 			{
-	// 				// std::allocator<MemoryBlock*>::pointer v8;
-	// 			}
-	// 		}
-	//
-	// 		i++;
-	// 	}
-	// }
+	m_lMemoryPoolSize = lMemoryPoolSize;
+	m_lMemoryBlockSize = lMaxBlockSize;
+	m_lMaxBlocks = lMemoryPoolSize / sizeof MemoryBlock;
+
+	if ( lMemoryPoolSize >> 4 )
+	{
+		int i = 0;
+
+		do
+		{
+			while( true )
+			{
+			auto block = new MemoryBlock( m_lMemoryBlockSize );
+			block->next = nullptr;
+			block->prev = nullptr;
+
+			typedef std::vector<MemoryBlock *> VectorOfMemoryBlocks;
+			typedef VectorOfMemoryBlocks::iterator MemoryBlockIterator;
+
+		if ( CMiniMem::m_vecMemoryPool._M_impl._M_finish == CMiniMem::m_vecMemoryPool._M_impl._M_end_of_storage )
+		{
+			std::vector::<MemoryBlock *>::_M_insert_aux();
+		}
+		else
+		{
+			std::allocator<MemoryBlock*>::pointer v8;
+		}
+
+		i++;
+		}
+	}
 }
-
-CMiniMem::CMiniMem(long lMaxBlockSize)
-{
-
 }
 
 CMiniMem::~CMiniMem()
@@ -359,4 +355,18 @@ UNTESTED void CMiniMem::Shutdown(void)
 {
 	if (_instance)
 		delete _instance;
+}
+
+//TODO: WHAMER
+void UpdateParticles( void )
+{
+	if( CMiniMem::_instance() )
+	{
+		CMiniMem::ProcessAll( CMiniMem::_instance() );
+	}
+	else
+	{
+		CMiniMem::CMiniMem( , );
+		CMiniMem::ProcessAll( CMiniMem::_instance() );
+	}
 }
