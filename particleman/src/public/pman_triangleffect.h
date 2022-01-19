@@ -78,7 +78,7 @@ public:
 	virtual void CheckCollision(float time) = 0;
 	virtual void Touch(Vector pos, Vector normal, int index) = 0;
 	virtual void Die(void) = 0;
-	virtual void InitializeSprite(Vector org, Vector normal, struct model_s * sprite, float size, float brightness) = 0;
+	virtual void InitializeSprite(Vector * p_org, Vector * p_normal, struct model_s * sprite, float size, float brightness) = 0;
 	virtual void Force(void) = 0;
 
 	float m_flSize; //scale of object
@@ -114,6 +114,7 @@ public:
 	Vector m_vLowLeft;
 	Vector m_vLowRight;
 	Vector m_vTopLeft;
+	Vector m_vTopRight;
 
 	Vector m_vColor;
 	float  m_flMass;

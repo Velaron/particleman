@@ -18,6 +18,8 @@
 
 #pragma once
 
+CFrustum g_cFrustum;
+
 enum FrustumSide
 {
 	RIGHT = 0,  // The RIGHT side of the frustum
