@@ -268,14 +268,14 @@ UNTESTED void CMiniMem::ProcessAll(void)
 #endif
 }
 
-UNTESTED void CMiniMem::Reset(void)
+UNTESTED void CMiniMem::Reset( void )
 {
 	auto pHead = m_ActiveMem.Front();
 
-	if (pHead)
+	if ( pHead )
 	{
 		auto pHeadNext = pHead->next;
-		while (pHeadNext)
+		while ( pHeadNext )
 		{
 			pHeadNext->prev = nullptr;
 			pHead->next = nullptr;
@@ -291,11 +291,11 @@ UNTESTED void CMiniMem::Reset(void)
 	}
 
 	auto pFM = m_FreeMem;
-	if (pFM)
+	if ( pFM )
 	{
 		auto pFMNext = m_FreeMem->next;
 
-		while (pFMNext)
+		while ( pFMNext )
 		{
 			pFMNext->prev = nullptr;
 			pFM->next = nullptr;
@@ -310,9 +310,30 @@ UNTESTED void CMiniMem::Reset(void)
 		m_FreeMem = nullptr;
 	}
 
-	// for (auto &&mem : CMiniMem::GetVecMemoryPool())
+	for ( auto &&mem : CMiniMem::GetVecMemoryPool() )
 	{
-		// TODO: finish vector here
+		m_FreeMem : CMiniMem::GetVecMemoryPool();
+
+		if( pFM )
+		{
+			pFM->prev = m_FreeMem++;
+			pFM->next = nullptr;
+			pFM->prev = nullptr;
+			pFM->prev = m_FreeMem;
+
+			if( m_FreeMem >= pFM )
+				return;
+		}
+		else
+		{
+			pFM->prev = m_FreeMem++;
+			pFM->next = nullptr;
+			pFM->prev = nullptr;
+
+			if( m_FreeMem >= pFM )
+				return;
+		}
+		m_FreeMem = 0;
 	}
 }
 
