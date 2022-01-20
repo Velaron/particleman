@@ -5,7 +5,6 @@
 struct ForceMember
 {
 	int m_iIndex;
-	ForceMember* m_pNext;
 	ForceMember* m_pPrevious;
 	Vector m_vOrigin;
 	Vector m_vDirection;

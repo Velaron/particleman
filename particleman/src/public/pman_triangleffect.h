@@ -65,21 +65,21 @@ public:
 
 	}
 
-	virtual void Think(float time) = 0;
-	virtual bool CheckVisibility(void) = 0;
-	virtual void Draw(void) = 0;
-	virtual void Animate(float time) = 0;
-	virtual void AnimateAndDie(float time) = 0;
-	virtual void Expand(float time) = 0;
-	virtual void Contract(float time) = 0;
-	virtual void Fade(float time) = 0;
-	virtual void Spin(float time) = 0;
-	virtual void CalculateVelocity(float time) = 0;
-	virtual void CheckCollision(float time) = 0;
-	virtual void Touch(Vector pos, Vector normal, int index) = 0;
-	virtual void Die(void) = 0;
-	virtual void InitializeSprite(Vector * p_org, Vector * p_normal, struct model_s * sprite, float size, float brightness) = 0;
-	virtual void Force(void) = 0;
+	virtual void Think(float time);
+	virtual bool CheckVisibility(void);
+	virtual void Draw(void);
+	virtual void Animate(float time);
+	virtual void AnimateAndDie(float time);
+	virtual void Expand(float time);
+	virtual void Contract(float time);
+	virtual void Fade(float time);
+	virtual void Spin(float time);
+	virtual void CalculateVelocity(float time);
+	virtual void CheckCollision(float time);
+	virtual void Touch(Vector pos, Vector normal, int index);
+	virtual void Die(void);
+	virtual void InitializeSprite(Vector * p_org, Vector * p_normal, struct model_s * sprite, float size, float brightness);
+	virtual void Force(void);
 
 	float m_flSize; //scale of object
 	float m_flScaleSpeed; //speed at which object expands
@@ -114,7 +114,6 @@ public:
 	Vector m_vLowLeft;
 	Vector m_vLowRight;
 	Vector m_vTopLeft;
-	Vector m_vTopRight;
 
 	Vector m_vColor;
 	float  m_flMass;

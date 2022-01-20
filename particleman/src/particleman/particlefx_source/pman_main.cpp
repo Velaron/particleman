@@ -1,10 +1,12 @@
 #include "pman_main.h"
+#include "pman_force.h"
+#include "pman_particlemem.h"
+#include "pman_frustum.h"
 
 #include "interface.h"
-
-#include "pman_force.h"
 #include "particleman.h"
-#include "pman_particlemem.h"
+
+#include "eiface.h"
 
 ForceList g_pForceList;
 
@@ -19,48 +21,22 @@ bool IsGamePaused( void )
 
 void IParticleMan_Active::SetUp( cl_enginefuncs_s *pEngineFunc )
 {
-	//TODO: WHAMER
-	cl_pmanstats = gEngfuncs.pfnRegisterVariable("cl_pmanstats", "0", 0);
+	cl_pmanstats = gEngfuncs.pfnRegisterVariable( "cl_pmanstats", "0", 0 );
 }
 
 void IParticleMan_Active::Update()
 {
-	if( g_pForceList.pFirst )
-		return;
-	
-	if( g_pForceList.pFirst->m_flDieTime == 0.0f && m_flDieTime >= gEngfuncs.GetClientTime() )
-//TODO: WHAMER( my logic is dead )
-	{
-		g_pForceList.pFirst->m_pNext;
+	//TODO: WHAMER: this is and of func
+	auto memory = CMiniMem::Instance();
 
-		if( g_pForceList.pLast == g_pForceList.pFirst )
-		{
-			g_pForceList.pFirst = 0;
-			g_pForceList.pCurrent = 0;
-			g_pForceList.pLast = 0;
-		}
-		else
-		{
-			g_pForceList.pFirst->m_pNext->m_pPrevious = 0;
-
-			if( g_pForceList.pFirst == g_pForceList.pLast )
-			{
-				g_pForceList.pFirst->m_pNext = 0;
-				g_pForceList.pFirst = g_pForceList.pCurrent; 
-				g_pForceList.pFirst = g_pForceList.pLast;
-			}
-		}
-		--g_pForceList.m_iElements;
-	}
-	else
+	for (const auto& member : g_pForceList)
 	{
-		g_pForceList.pFirst->m_pNext->m_pPrevious = g_pForceList.pFirst->m_pPrevious;
+		memory->ApplyForce(member.m_vOrigin, member.m_vDirection, member.m_flRadius, member.m_flStrength);
 	}
 
-	for( hz )
-	{
-		CMiniMem::ApplyForce( &p_vOrigin, &p_vDirection, flRadius, flStrength );
-	}
+	g_cFrustum.CalculateFrustum();
+
+	memory->ProcessAll();
 
 	if ( cl_pmanstats->value == 1.0f )
 	{

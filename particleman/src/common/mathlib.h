@@ -1,134 +1,120 @@
-/*
+/***
 *
-*    This program is free software; you can redistribute it and/or modify it
-*    under the terms of the GNU General Public License as published by the
-*    Free Software Foundation; either version 2 of the License, or (at
-*    your option) any later version.
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*	All Rights Reserved.
 *
-*    This program is distributed in the hope that it will be useful, but
-*    WITHOUT ANY WARRANTY; without even the implied warranty of
-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-*    General Public License for more details.
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
 *
-*    You should have received a copy of the GNU General Public License
-*    along with this program; if not, write to the Free Software Foundation,
-*    Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*
-*    In addition, as a special exception, the author gives permission to
-*    link the code of this program with the Half-Life Game Engine ("HL
-*    Engine") and Modified Game Libraries ("MODs") developed by Valve,
-*    L.L.C ("Valve").  You must obey the GNU General Public License in all
-*    respects for all of the code used other than the HL Engine and MODs
-*    from Valve.  If you modify this file, you may extend this exception
-*    to your version of the file, but you are not obligated to do so.  If
-*    you do not wish to do so, delete this exception statement from your
-*    version.
-*
-*/
+****/
+// mathlib.h
 
-#ifndef MATHLIB_H
-#define MATHLIB_H
-#ifdef _WIN32
 #pragma once
-#endif
 
-#include "osconfig.h"
+#include <cmath>
 
 typedef float vec_t;
 
-#if !defined DID_VEC3_T_DEFINE && !defined vec3_t
-#define DID_VEC3_T_DEFINE
-typedef vec_t vec3_t[3];
-#endif
+#include "vector.h"
 
-typedef vec_t vec4_t[4];
+typedef vec_t vec4_t[4]; // x,y,z,w
+typedef vec_t vec5_t[5];
+
+typedef short vec_s_t;
+typedef vec_s_t vec3s_t[3];
+typedef vec_s_t vec4s_t[4]; // x,y,z,w
+typedef vec_s_t vec5s_t[5];
+
+typedef int fixed4_t;
+typedef int fixed8_t;
 typedef int fixed16_t;
-
-typedef union DLONG_u
-{
-	int i[2];
-	double d;
-	float f;
-} DLONG;
-
-#define M_PI			3.14159265358979323846
-
-#ifdef __cplusplus
-#ifdef min
-#undef min
+#ifndef M_PI
+#define M_PI 3.14159265358979323846 // matches value in gcc v2 math.h
 #endif
 
-#ifdef max
-#undef max
-#endif
+struct mplane_s;
 
-#ifdef clamp
-#undef clamp
-#endif
+const Vector vec3_origin(0, 0, 0);
+const Vector g_vecZero(0, 0, 0);
+extern int nanmask;
 
-template <typename T>
-inline T min(T a, T b)
-{
-	return (a < b) ? a : b;
-}
+#define IS_NAN(x) (((*(int*)&x) & nanmask) == nanmask)
 
-template <typename T>
-inline T max(T a, T b)
-{
-	return (a < b) ? b : a;
-}
-
-template <typename T>
-inline T clamp(T a, T min, T max)
-{
-	return (a > max) ? max : (a < min) ? min : a;
-}
-
-template<typename T>
-inline T M_min(T a, T b)
-{
-	return min(a, b);
-}
-
-template<typename T>
-inline T M_max(T a, T b)
-{
-	return max(a, b);
-}
-
-template<typename T>
-inline T M_clamp(T a, T min, T max)
-{
-	return clamp(a, min, max);
-}
-
-template<typename T>
-inline double M_sqrt(T value)
-{
-	return sqrt(value);
-}
-
-template <typename T>
-inline T bswap(T s)
-{
-	switch (sizeof(T))
-	{
-	case 2: { auto res = __builtin_bswap16(*(unsigned short *)&s); return *(T *)&res; }
-	case 4: { auto res = __builtin_bswap32(*(unsigned int *)&s); return *(T *)&res; }
-	case 8: { auto res = __builtin_bswap64(*(unsigned long long *)&s); return *(T *)&res; }
-	default: return s;
+#define VectorSubtract(a, b, c)   \
+	{                             \
+		(c)[0] = (a)[0] - (b)[0]; \
+		(c)[1] = (a)[1] - (b)[1]; \
+		(c)[2] = (a)[2] - (b)[2]; \
 	}
+#define VectorAdd(a, b, c)        \
+	{                             \
+		(c)[0] = (a)[0] + (b)[0]; \
+		(c)[1] = (a)[1] + (b)[1]; \
+		(c)[2] = (a)[2] + (b)[2]; \
+	}
+#define VectorCopy(a, b) \
+	{                    \
+		(b)[0] = (a)[0]; \
+		(b)[1] = (a)[1]; \
+		(b)[2] = (a)[2]; \
+	}
+inline void VectorClear(float* a)
+{
+	a[0] = 0.0;
+	a[1] = 0.0;
+	a[2] = 0.0;
 }
-#else // __cplusplus
-#ifndef max
-#define max(a,b) (((a) > (b)) ? (a) : (b))
-#endif
 
-#ifndef min
-#define min(a,b) (((a) < (b)) ? (a) : (b))
-#endif
+void VectorMA(const float* veca, float scale, const float* vecb, float* vecc);
 
-#define clamp(val, min, max) (((val) > (max)) ? (max) : (((val) < (min)) ? (min) : (val)))
-#endif // __cplusplus
+bool VectorCompare(const float* v1, const float* v2);
+float Length(const float* v);
+void CrossProduct(const float* v1, const float* v2, float* cross);
+float VectorNormalize(float* v); // returns vector length
+void VectorInverse(float* v);
+void VectorScale(const float* in, float scale, float* out);
+int Q_log2(int val);
 
-#endif // MATHLIB_H
+void R_ConcatRotations(float in1[3][3], float in2[3][3], float out[3][3]);
+void R_ConcatTransforms(float in1[3][4], float in2[3][4], float out[3][4]);
+
+void FloorDivMod(double numer, double denom, int* quotient,
+	int* rem);
+fixed16_t Invert24To16(fixed16_t val);
+int GreatestCommonDivisor(int i1, int i2);
+
+void AngleVectors(const Vector& angles, Vector* forward, Vector* right, Vector* up);
+void AngleVectorsTranspose(const Vector& angles, Vector* forward, Vector* right, Vector* up);
+#define AngleIVectors AngleVectorsTranspose
+
+void AngleMatrix(const float* angles, float (*matrix)[4]);
+void AngleIMatrix(const Vector& angles, float (*matrix)[4]);
+void VectorTransform(const float* in1, float in2[3][4], float* out);
+
+void NormalizeAngles(float* angles);
+void InterpolateAngles(float* start, float* end, float* output, float frac);
+float AngleBetweenVectors(const float* v1, const float* v2);
+
+
+void VectorMatrix(const Vector& forward, Vector& right, Vector& up);
+void VectorAngles(const float* forward, float* angles);
+
+int InvertMatrix(const float* m, float* out);
+
+int BoxOnPlaneSide(const Vector& emins, const Vector& emaxs, struct mplane_s* plane);
+float anglemod(float a);
+
+
+
+#define BOX_ON_PLANE_SIDE(emins, emaxs, p)                                                                 \
+	(((p)->type < 3) ? (                                                                                   \
+						   ((p)->dist <= (emins)[(p)->type]) ? 1                                           \
+															 : (                                           \
+																   ((p)->dist >= (emaxs)[(p)->type]) ? 2   \
+																									 : 3)) \
+					 : BoxOnPlaneSide((emins), (emaxs), (p)))
