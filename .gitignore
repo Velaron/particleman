@@ -1,10 +1,2 @@
-.vs
-Debug
-Release
-Example/Debug
-Example/Release
-MultiEmulator/Debug
-MultiEmulator/Release
-
-pfunct.h
-totals.h
+gdb.txt
+pahole.txt

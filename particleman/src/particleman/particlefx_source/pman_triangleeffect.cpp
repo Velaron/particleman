@@ -1,1 +1,0 @@
-#include "pman_triangleffect.h"

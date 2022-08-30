@@ -3,7 +3,10 @@ project(particleman)
 
 set(PMAN_LIB particleman)
 
-file(GLOB_RECURSE PMAN_SRC "particleman/**/*.cpp")
+file(GLOB_RECURSE PMAN_SRC
+	"particlefx_source/*.cpp"
+	"../public/interface.cpp"
+)
 
 if(NOT MSVC)
 	add_definitions(-D_LINUX)
@@ -12,17 +15,16 @@ if(NOT MSVC)
 endif()
 
 include_directories(
-	particleman/src/common
-	particleman/src/dlls
-	particleman/src/engine
-	particleman/src/particleman/particlefx_header
-	particleman/src/pm_shared
-	particleman/src/public
+	../common
+	../cl_dll
+	../engine
+	../public
+	../pm_shared
+	particlefx_header
 )
 
 add_library(${PMAN_LIB} MODULE ${PMAN_SRC})
 
-#[[
 install(TARGETS ${PMAN_LIB}
 	DESTINATION "${GAMEDIR}/${CLIENT_INSTALL_DIR}/"
 	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
@@ -34,4 +36,3 @@ if(WIN32 AND MSVC)
 	install(FILES $<TARGET_PDB_FILE:${PMAN_LIB}>
 		DESTINATION "${GAMEDIR}/${CLIENT_INSTALL_DIR}/" OPTIONAL)
 endif()
-]]
